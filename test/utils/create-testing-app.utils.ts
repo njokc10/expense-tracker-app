@@ -4,6 +4,7 @@ import {
   ForwardReference,
   Provider,
   INestApplication,
+  ValidationPipe,
 } from '@nestjs/common';
 import { NestApplicationContextOptions } from '@nestjs/common/interfaces/nest-application-context-options.interface';
 import { Test, TestingModuleBuilder } from '@nestjs/testing';
@@ -11,6 +12,9 @@ import * as nock from 'nock';
 
 import { ClsModule } from '~common/cls/cls.module';
 import { ConfigModule } from '~common/config/config.module';
+import { ValidationError } from '~common/error/validation.error';
+import { AllExceptionsFilter } from '~common/http/exception-response.helper';
+import { flatten } from '~utils/validation';
 
 import { PrismaConfig } from '~vendor/prisma/prisma.config';
 import { PrismaService } from '~vendor/prisma/prisma.service';
@@ -68,6 +72,20 @@ export async function startTestingApp(
   }
 
   const app = compiledModule.createNestApplication(appOptions);
+
+  app.useGlobalPipes(
+    new ValidationPipe({
+      transform: true,
+      whitelist: true,
+      forbidNonWhitelisted: true,
+      exceptionFactory: (fieldErrors) => {
+        const err = new ValidationError(flatten(fieldErrors));
+        return err;
+      },
+    }),
+  );
+
+  app.useGlobalFilters(new AllExceptionsFilter());
 
   await app.init();
 
