@@ -3,11 +3,12 @@ import { CreateAccessTokenUseCase } from './use-cases/create-access-token.use-ca
 import { JwtModule } from '@nestjs/jwt';
 import { LoginUseCase } from './use-cases/login.use-case';
 import { DbModule } from '~db/db.module';
+import { VerifyAccessTokenUseCase } from './use-cases/verify-access-token.use-case';
 
 @Global()
 @Module({
-  imports: [JwtModule.register({ secret: 'hard!to-guess_secret' }), DbModule],
-  providers: [CreateAccessTokenUseCase, LoginUseCase],
-  exports: [CreateAccessTokenUseCase, LoginUseCase],
+  imports: [JwtModule.register({ secret: 'secret', global: true }), DbModule],
+  providers: [CreateAccessTokenUseCase, VerifyAccessTokenUseCase, LoginUseCase],
+  exports: [CreateAccessTokenUseCase, VerifyAccessTokenUseCase, LoginUseCase],
 })
 export class AuthModule {}

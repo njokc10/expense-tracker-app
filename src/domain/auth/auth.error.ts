@@ -15,3 +15,11 @@ export class UserNotFoundAuthError extends BaseError {
     super({ message: 'User not found!' });
   }
 }
+
+export class InvalidAccessTokenAuthError extends BaseError {
+  InvalidAccessTokenAuthError = true;
+  code = InvalidAccessTokenAuthError.name;
+  constructor() {
+    super({ message: 'Invalid Access Token' });
+  }
+}

@@ -7,3 +7,11 @@ export class EmailInUseUserError extends BaseError {
     super({ message: 'Email in use!' });
   }
 }
+
+export class NotFoundUserError extends BaseError {
+  NotFoundUserError = true;
+  code = NotFoundUserError.name;
+  constructor() {
+    super({ message: 'User not found!' });
+  }
+}

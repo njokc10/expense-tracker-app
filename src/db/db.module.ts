@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Global, Module } from '@nestjs/common';
 
 import { PrismaModule } from '~vendor/prisma/prisma.module';
 import { UserPrismaRepository } from './repositories/user.prisma.repository';
@@ -9,6 +9,7 @@ export const USER_DB_REPOSITORY = Symbol('UserDbRepositoryKey');
 export const CATEGORY_DB_REPOSITORY = Symbol('CategoryDbRepositoryKey');
 export const TRANSACTION_DB_REPOSITORY = Symbol('TransactionDbRepositoryKey');
 
+@Global()
 @Module({
   imports: [PrismaModule],
   providers: [

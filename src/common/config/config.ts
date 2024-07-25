@@ -2,6 +2,7 @@ import { Type } from 'class-transformer';
 import { IsNumber, IsObject, ValidateNested } from 'class-validator';
 
 import { PrismaConfig } from '~vendor/prisma/prisma.config';
+import { LoggerConfig } from '~common/logging/logger.config';
 import { AuthConfig } from '~domain/auth/auth.config';
 
 export class AppConfig {
@@ -18,6 +19,11 @@ export class Config {
   @IsObject()
   @ValidateNested()
   public readonly prisma!: PrismaConfig;
+
+  @Type(() => LoggerConfig)
+  @IsObject()
+  @ValidateNested()
+  public readonly logger!: LoggerConfig;
 
   @Type(() => AuthConfig)
   @IsObject()
