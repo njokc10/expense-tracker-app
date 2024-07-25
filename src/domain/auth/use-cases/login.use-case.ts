@@ -33,9 +33,7 @@ export class LoginUseCase {
       return Err(new WrongPasswordAuthError());
     }
 
-    const payload = { sub: user.id };
-    const accessToken = await this.jwtService.signAsync(payload);
-
+    const accessToken = this.jwtService.sign({ sub: user.id });
     return Ok(accessToken);
   }
 }
