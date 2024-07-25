@@ -10,7 +10,7 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = "postgresql://admin:admin@localhost:5435/expense_tracker?schema=public"
+  url      = env("DATABASE_URL")
 }
 
 model User {

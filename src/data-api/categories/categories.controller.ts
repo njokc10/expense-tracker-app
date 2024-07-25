@@ -1,4 +1,12 @@
-import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Post,
+  Query,
+  UseGuards,
+} from '@nestjs/common';
 
 import { CreateCategoryUseCase } from '~domain/category/use-cases/create-category.use-case';
 import { GetCategoriesUseCase } from '~domain/category/use-cases/get-categories.use-case';
@@ -7,7 +15,9 @@ import { CategoryResDto } from './dto/category.res.dto';
 import { PaginationDto } from '~common/http/dto/pagination.dto';
 import { API_V1_PATH } from '~common/http/http.constant';
 import { ApiOkResponse } from '@nestjs/swagger';
+import { AuthGuard } from '~data-api/auth/guards/auth.guard';
 
+@UseGuards(AuthGuard)
 @Controller(`${API_V1_PATH}/categories`)
 export class CategoriesController {
   constructor(

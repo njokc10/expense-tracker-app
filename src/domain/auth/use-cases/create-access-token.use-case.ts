@@ -8,12 +8,6 @@ export class CreateAccessTokenUseCase {
   constructor(private readonly jwtService: JwtService) {}
 
   execute(user: UserEntity): string {
-    let accessToken: string;
-
-    const payload = { sub: user.id };
-    this.jwtService.signAsync(payload).then((value) => {
-      accessToken = value;
-    });
-    return accessToken;
+    return this.jwtService.sign({ sub: user.id });
   }
 }
