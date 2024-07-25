@@ -18,8 +18,6 @@ export class AuthGuard implements CanActivate {
   constructor(private verifyAccessTokenUseCase: VerifyAccessTokenUseCase) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
-    console.log('We are here 2');
-
     const request = context.switchToHttp().getRequest();
     const token = this.extractTokenFromHeader(request);
 
