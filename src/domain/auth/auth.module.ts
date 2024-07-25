@@ -7,7 +7,7 @@ import { VerifyAccessTokenUseCase } from './use-cases/verify-access-token.use-ca
 
 @Global()
 @Module({
-  imports: [JwtModule.register({ secret: 'secret', global: true }), DbModule],
+  imports: [JwtModule, DbModule],
   providers: [CreateAccessTokenUseCase, VerifyAccessTokenUseCase, LoginUseCase],
   exports: [CreateAccessTokenUseCase, VerifyAccessTokenUseCase, LoginUseCase],
 })

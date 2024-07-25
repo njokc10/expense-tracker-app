@@ -6,12 +6,14 @@ import * as argon2 from 'argon2';
 import { IUserRepository } from '~domain/user/user.repository';
 import { USER_DB_REPOSITORY } from '~db/db.module';
 import { UserNotFoundAuthError, WrongPasswordAuthError } from '../auth.error';
+import { AuthConfig } from '../auth.config';
 
 @Injectable()
 export class LoginUseCase {
   constructor(
     @Inject(USER_DB_REPOSITORY) private userRepository: IUserRepository,
     private jwtService: JwtService,
+    private authConfig: AuthConfig,
   ) {}
 
   async execute({
@@ -33,8 +35,13 @@ export class LoginUseCase {
       return Err(new WrongPasswordAuthError());
     }
 
-    const payload = { sub: user.id };
-    const accessToken = await this.jwtService.signAsync(payload);
+    const accessToken = await this.jwtService.signAsync(
+      { sub: user.id },
+      {
+        secret: this.authConfig.jwtTokenSecret,
+        expiresIn: this.authConfig.jwtTokenExpiresIn,
+      },
+    );
 
     return Ok(accessToken);
   }

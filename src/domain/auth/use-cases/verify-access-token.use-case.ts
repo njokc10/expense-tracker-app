@@ -27,15 +27,15 @@ export class VerifyAccessTokenUseCase {
   ): Promise<
     Result<UserEntity, InvalidAccessTokenAuthError | UserNotFoundAuthError>
   > {
-    const payload = (await this.jwtService.verifyAsync(token, {
+    const payload = await this.jwtService.verifyAsync<JwtPayload>(token, {
       secret: this.authConfig.jwtTokenSecret,
-    })) as JwtPayload;
+    });
 
     if (!payload) {
       return Err(new InvalidAccessTokenAuthError());
     }
 
-    const currentUser = await this.setUserAsyncCtx(payload);
+    const currentUser = await this.setCurrentUser(payload);
 
     if (!currentUser) {
       return Err(new UserNotFoundAuthError());
@@ -44,7 +44,7 @@ export class VerifyAccessTokenUseCase {
     return Ok(currentUser);
   }
 
-  private setUserAsyncCtx(payload: JwtPayload) {
+  private setCurrentUser(payload: JwtPayload) {
     return this.authAsyncCtx.init(payload.sub);
   }
 }
